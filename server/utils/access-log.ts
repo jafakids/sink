@@ -35,6 +35,9 @@ export const blobsMap = {
   blob14: 'device',
   blob15: 'deviceType',
   blob16: 'COLO',
+  // Jafa Kids fork: added at the end so earlier blobs keep their positions.
+  blob17: 'recipient',
+  blob18: 'bot',
 } as const
 
 export const doublesMap = {
@@ -107,6 +110,15 @@ export function doubles2logs(doubles: number[]) {
   }, {} as Partial<LogsMap>)
 }
 
+/**
+ * Jafa Kids fork: a newsletter's per-recipient code, from the visitor's `?r=` (a-z 0-9, 8 to 16
+ * characters); anything else is ''. HQ (the sender) maps the code to a recipient.
+ */
+export function recipientCode(value: unknown): string {
+  const code = typeof value === 'string' ? value.trim().toLowerCase() : ''
+  return /^[a-z0-9]{8,16}$/.test(code) ? code : ''
+}
+
 function getCountryName(country?: string): string {
   try {
     return new Intl.DisplayNames(['en'], { type: 'region' }).of(country || 'WD') || 'Worldwide'
@@ -166,6 +178,8 @@ export function collectAccessLog(event: H3Event): AccessLogResult | undefined {
     device: uaInfo?.device?.model,
     deviceType: uaInfo?.device?.type,
     COLO: cf?.colo,
+    recipient: recipientCode(getQuery(event).r),
+    bot: isBot ? '1' : '',
 
     // For RealTime Globe
     latitude: Number(cf?.latitude || getHeader(event, 'cf-iplatitude') || 0),

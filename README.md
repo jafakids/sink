@@ -1,5 +1,12 @@
 # ⚡ Sink
 
+> **Jafa Kids fork.** This fork adds two fields to each click in the analytics (`server/utils/access-log.ts`, `shared/schemas/query.ts`; test `tests/unit/recipient-code.spec.ts`):
+> - `recipient` (blob17): a newsletter's per-recipient code from the visitor's `?r=` (8–16 letters and digits, else empty). Jafa Kids HQ maps codes to recipients.
+> - `bot` (blob18): `1` when Sink's own bot check matched (it already worked this out, but didn't store it).
+>
+> Both come after the original 16 blobs, so earlier data keeps its meaning, and both can be grouped (`/api/stats/metrics?type=recipient`) and filtered (`?recipient=`, `?bot=1`). **Keep this change when syncing with upstream.**
+
+
 **A Simple, Speedy, Secure, and Serverless Link Shortener with Analytics, Running Entirely on Cloudflare.**
 
 [Website](https://sink.cool) · [Documentation](https://docs.sink.cool) · [API Reference](https://sink.cool/_docs/scalar)

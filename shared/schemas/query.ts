@@ -20,6 +20,9 @@ export const FilterQuerySchema = z.object({
   browserType: z.string().optional(),
   device: z.string().optional(),
   deviceType: z.string().optional(),
+  // Jafa Kids fork: see server/utils/access-log.ts (blob17, blob18).
+  recipient: z.string().optional(),
+  bot: z.string().optional(),
 })
 
 /** The filters plus a row limit for queries that actually paginate. */
